@@ -1,0 +1,23 @@
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: schoolmanage_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: school_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456789
+    ports:
+      - "5005:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - school-net 
+
+volumes:
+  postgres_data:
+
+networks:
+  school-net:
+    driver: bridge

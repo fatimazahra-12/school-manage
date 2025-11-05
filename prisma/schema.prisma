@@ -1,0 +1,250 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  nom          String
+  email        String    @unique
+  mot_de_passe String
+  role_id      Int
+  is_verified  Boolean   @default(false)
+  is_active    Boolean   @default(true)
+  last_login   DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  role           Role             @relation(fields: [role_id], references: [id])
+  refreshTokens  RefreshToken[]
+  settings       Settings?
+  notifications  Notification[]
+  modules        Module[]         @relation("EnseignantModules")
+  cours          Cours[]          @relation("EnseignantCours")
+  notes          Note[]
+  absences       Absence[]
+  groupes        EtudiantGroupe[]
+  passwordResets PasswordReset[]
+  actualites     Actualite[]
+}
+
+model Role {
+  id              Int              @id @default(autoincrement())
+  nom             String
+  description     String?
+  users           User[]
+  rolePermissions RolePermission[]
+}
+
+model Permission {
+  id              Int              @id @default(autoincrement())
+  nom             String
+  code            String
+  description     String?
+  rolePermissions RolePermission[]
+}
+
+model RolePermission {
+  id            Int @id @default(autoincrement())
+  role_id       Int
+  permission_id Int
+
+  role       Role       @relation(fields: [role_id], references: [id])
+  permission Permission @relation(fields: [permission_id], references: [id])
+}
+
+model RefreshToken {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  token      String
+  expires_at DateTime
+  revoked    Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model PasswordReset {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  code       String
+  type       String // "verify" or "reset"
+  expires_at DateTime
+  used       Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model Filiere {
+  id          Int      @id @default(autoincrement())
+  nom         String
+  code        String
+  description String?
+  groupes     Groupe[]
+  modules     Module[]
+}
+
+model Groupe {
+  id         Int    @id @default(autoincrement())
+  nom        String
+  niveau     String
+  annee      String
+  filiere_id Int
+
+  filiere   Filiere          @relation(fields: [filiere_id], references: [id])
+  etudiants EtudiantGroupe[]
+  cours     Cours[]
+}
+
+model EtudiantGroupe {
+  id          Int @id @default(autoincrement())
+  etudiant_id Int
+  groupe_id   Int
+
+  etudiant User   @relation(fields: [etudiant_id], references: [id])
+  groupe   Groupe @relation(fields: [groupe_id], references: [id])
+}
+
+model Module {
+  id            Int    @id @default(autoincrement())
+  nom           String
+  code          String
+  coefficient   Float
+  filiere_id    Int
+  enseignant_id Int
+
+  filiere    Filiere  @relation(fields: [filiere_id], references: [id])
+  enseignant User     @relation("EnseignantModules", fields: [enseignant_id], references: [id])
+  cours      Cours[]
+  examens    Examen[]
+}
+
+model Salle {
+  id         Int      @id @default(autoincrement())
+  nom        String
+  capacite   Int
+  type       String // ex: "amphi", "labo", "classe"
+  disponible Boolean  @default(true)
+  cours      Cours[]
+  examens    Examen[]
+}
+
+model Cours {
+  id            Int      @id @default(autoincrement())
+  module_id     Int
+  enseignant_id Int
+  salle_id      Int
+  groupe_id     Int
+  titre         String
+  date_cours    DateTime
+  heure_debut   DateTime
+  heure_fin     DateTime
+
+  module     Module     @relation(fields: [module_id], references: [id])
+  enseignant User       @relation("EnseignantCours", fields: [enseignant_id], references: [id])
+  salle      Salle      @relation(fields: [salle_id], references: [id])
+  groupe     Groupe     @relation(fields: [groupe_id], references: [id])
+  absences   Absence[]
+  planning   Planning[]
+}
+
+model Examen {
+  id          Int      @id @default(autoincrement())
+  module_id   Int
+  salle_id    Int
+  date_examen DateTime
+  type        String
+  coefficient Float
+
+  module Module @relation(fields: [module_id], references: [id])
+  salle  Salle  @relation(fields: [salle_id], references: [id])
+  notes  Note[]
+}
+
+model Note {
+  id          Int     @id @default(autoincrement())
+  examen_id   Int
+  etudiant_id Int
+  note        Float
+  remarque    String?
+
+  examen   Examen @relation(fields: [examen_id], references: [id])
+  etudiant User   @relation(fields: [etudiant_id], references: [id])
+}
+
+model Absence {
+  id          Int      @id @default(autoincrement())
+  cours_id    Int
+  etudiant_id Int
+  date        DateTime
+  motif       String?
+  justifiee   Boolean  @default(false)
+
+  cours    Cours @relation(fields: [cours_id], references: [id])
+  etudiant User  @relation(fields: [etudiant_id], references: [id])
+}
+
+model Planning {
+  id          Int      @id @default(autoincrement())
+  cours_id    Int
+  jour        String
+  heure_debut DateTime
+  heure_fin   DateTime
+
+  cours Cours @relation(fields: [cours_id], references: [id])
+}
+
+model Actualite {
+  id        Int           @id @default(autoincrement())
+  titre     String
+  contenu   String
+  image_url String?
+  type      TypeActualite
+  date_pub  DateTime      @default(now())
+  auteur_id Int
+
+  auteur User @relation(fields: [auteur_id], references: [id])
+}
+
+enum TypeActualite {
+  EVENEMENT
+  ANNONCE
+  INFO
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  titre      String
+  message    String
+  type       String
+  statut     String   @default("non_lu")
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+}
+
+model Settings {
+  id                     Int      @id @default(autoincrement())
+  user_id                Int      @unique
+  langue                 String   @default("fr")
+  theme                  String   @default("clair")
+  notifications_activees Boolean  @default(true)
+  format_date            String   @default("dd/MM/yyyy")
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id])
+}
