@@ -1,6 +1,6 @@
 import express from 'express';
-// import moduleRoute from "./routes/moduleRoute.js";
-import examenRoute from "./routes/examRoute.js";
+import moduleRoute from "./routes/moduleRoute.js";
+
 
 
 
@@ -9,10 +9,9 @@ const app = express();
 app.use(express.json());
 
 // Module routes
-//app.use("/api/modules", moduleRoute);
+app.use("/api/modules", moduleRoute);
 
-// Examen routes
-app.use("/api/examens", examenRoute);
+
 
 const PORT = process.env.PORT || 8081;
 
