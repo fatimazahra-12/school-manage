@@ -17,6 +17,10 @@ model Candidat {
   adresse          String?
   date_naissance   DateTime?
   filiere_id       Int
+  niveau_etude      NiveauEtude
+  note_bac          Float?
+  note_diplome      Float?
+  type_diplome      String?
   statut           StatutCandidature  @default(EN_ATTENTE)
   date_candidature DateTime           @default(now())
   commentaire_admin String?
@@ -31,6 +35,13 @@ enum StatutCandidature {
   ACCEPTEE
   REFUSEE
 }
+enum NiveauEtude {
+  BAC
+  BAC_PLUS_1
+  BAC_PLUS_2
+  BAC_PLUS_3
+}
+
 
 model User {
   id             Int              @id @default(autoincrement())
