@@ -33,6 +33,7 @@
        // Auth & Système 
        { nom: "Gérer les utilisateurs", code: "USER_MANAGE", description: "Créer, modifier, supprimer des utilisateurs" },
        { nom: "Gérer les rôles et permissions", code: "ROLE_MANAGE", description: "Administrer les rôles et accès" },
+       { nom: "Gérer les permissions", code: "PERMISSION_MANAGE", description: "Créer, modifier, supprimer des permissions" },
        { nom: "Voir les utilisateurs", code: "USER_VIEW", description: "Lister et consulter les utilisateurs" },
        { nom: "Modifier son profil", code: "AUTH_PROFILE", description: "Modifier son propre profil" },
        { nom: "Changer son mot de passe", code: "AUTH_PASSWORD_CHANGE", description: "Changer son mot de passe" },
@@ -113,6 +114,7 @@
        "SETTINGS_MANAGE",
        "NOTIF_MANAGE",
        "ACTUALITE_VIEW",
+       "PERMISSION_MANAGE",
      ]);
    
      // Administrateur Pédagogique 
