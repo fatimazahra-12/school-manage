@@ -1,36 +1,21 @@
 {
   "compilerOptions": {
-    /* === Fichiers & sorties === */
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "rootDir": "src",
     "outDir": "dist",
-
-    /* === Module & environnement === */
-    "module": "nodenext",
-    "target": "esnext",
-    "moduleResolution": "nodenext",
-    "lib": ["esnext"],
-    "types": ["node"],
-
-    /* === Compatibilité ESM / CommonJS === */
+    "lib": ["ESNext"],
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": false, // désactive pour corriger les imports
-
-    /* === Options de build === */
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
     "skipLibCheck": true,
-
-    /* === Type checking strict === */
     "strict": true,
+    "sourceMap": true,
+    "isolatedModules": true,
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    /* === Autres === */
-    "moduleDetection": "force",
-    "isolatedModules": true
+    "exactOptionalPropertyTypes": true
   },
-  "include": ["src", "prisma.config.ts"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }
