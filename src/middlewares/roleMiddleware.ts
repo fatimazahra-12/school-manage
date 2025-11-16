@@ -6,25 +6,25 @@ import { Permission, RolePermission } from "../generated/prisma/client.js";
 export const checkPermission = (permissionCode: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = (req as any).user?.id; // récupéré depuis ton middleware d’auth JWT
-      if (!userId) {
+      if (!req.user) {
         return res.status(401).json({ message: "Utilisateur non authentifié." });
       }
 
-      // Récupère le rôle et les permissions de l'utilisateur
       const user = await prisma.user.findUnique({
-        where: { id: userId },
+        where: { id: req.user.id },
         include: {
           role: {
             include: {
               rolePermissions: {
-                include: { permission: true },
-              },
-            },
-          },
-        },
+                include: {
+                  permission: true
+                }
+              }
+            }
+          }
+        }
       });
-
+      
       if (!user) {
         return res.status(404).json({ message: "Utilisateur introuvable." });
       }
