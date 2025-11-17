@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { prisma } from '../prismaClient';
+import prisma from '../config/prisma.js';
 
 export async function listPlanning(_req: Request, res: Response) {
   try {
