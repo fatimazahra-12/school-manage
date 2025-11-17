@@ -7,6 +7,7 @@ import {
   deleteUser,
   toggleUserActive,
 getUsersEtudiantsByGroupe,
+  listUsersByRole,
 } from "../controllers/userController.js";
 
 const router = Router();
@@ -19,5 +20,6 @@ router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
 router.patch("/:id/toggle", toggleUserActive);
 router.get("/groupe/:groupeId/etudiants", getUsersEtudiantsByGroupe);
+router.get("/role/:roleName", listUsersByRole);
 
 export default router;

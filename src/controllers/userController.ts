@@ -130,3 +130,32 @@ export const getUsersEtudiantsByGroupe = async (req: Request, res: Response) => 
     res.status(500).json({ error: "Erreur lors de la récupération des étudiants du groupe" });
   }
 };
+
+export const listUsersByRole = async (req: Request, res: Response)=> {
+  try {
+    const { roleName } = req.params;
+
+    if (!roleName) return res.status(400).json({ message: "roleName parameter is required" });
+
+    const role = await prisma.role.findFirst({
+      where: {
+        nom: {
+          equals: roleName,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    if (!role) return res.status(404).json({ message: "Rôle introuvable" });
+
+    const users = await prisma.user.findMany({
+      where: { role_id: role.id },
+      include: { role: true },
+    });
+
+    res.json(users);
+  } catch (error) {
+    console.error("Erreur listUsersByRole:", error);
+    res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs par rôle" });
+  }
+};
