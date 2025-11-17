@@ -1,19 +1,19 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
+import { checkPermission } from "../middlewares/roleMiddleware.js";
 import {
   listCours,
   getCoursById,
   createCours,
   updateCours,
   deleteCours,
-} from '../controllers/coursController';
+} from "../controllers/coursController.js";
 
 const r = Router();
 
-r.get('/', authorize('COURS_READ'), listCours);
-r.get('/:id', authorize('COURS_READ'), getCoursById);
-r.post('/', authorize('COURS_CREATE'), createCours);
-r.put('/:id', authorize('COURS_UPDATE'), updateCours);
-r.delete('/:id', authorize('COURS_DELETE'), deleteCours);
+r.get('/', checkPermission("CLASSE_VIEW"), listCours);
+r.get('/:id', checkPermission("CLASSE_VIEW"), getCoursById);
+r.post('/', checkPermission("CLASSE_MANAGE"), createCours);
+r.put('/:id', checkPermission("CLASSE_MANAGE"), updateCours);
+r.delete('/:id', checkPermission("CLASSE_MANAGE"), deleteCours);
 
 export default r;

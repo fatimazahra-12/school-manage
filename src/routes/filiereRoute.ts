@@ -1,15 +1,15 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
+import { checkPermission } from "../middlewares/roleMiddleware.js";
 import {
   listFilieres, getFiliereById, createFiliere, updateFiliere, deleteFiliere,
-} from '../controllers/filiereController';
+} from "../controllers/filiereController.js";
 
 const r = Router();
 
-r.get('/', authorize('FILIERE_READ'), listFilieres);
-r.get('/:id', authorize('FILIERE_READ'), getFiliereById);
-r.post('/', authorize('FILIERE_CREATE'), createFiliere);
-r.put('/:id', authorize('FILIERE_UPDATE'), updateFiliere);
-r.delete('/:id', authorize('FILIERE_DELETE'), deleteFiliere);
+r.get('/', checkPermission("FILIERE_VIEW"), listFilieres);
+r.get('/:id', checkPermission("FILIERE_VIEW"), getFiliereById);
+r.post('/', checkPermission("FILIERE_MANAGE"), createFiliere);
+r.put('/:id', checkPermission("FILIERE_MANAGE"), updateFiliere);
+r.delete('/:id', checkPermission("FILIERE_MANAGE"), deleteFiliere);
 
 export default r;

@@ -1,15 +1,13 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
-import {
-  listSalles, getSalleById, createSalle, updateSalle, deleteSalle,
-} from '../controllers/salleController';
+import { listSalles, getSalleById, createSalle, updateSalle, deleteSalle } from "../controllers/salleController.js";
+import { checkPermission } from "../middlewares/roleMiddleware.js";
 
 const r = Router();
 
-r.get('/', authorize('SALLE_READ'), listSalles);
-r.get('/:id', authorize('SALLE_READ'), getSalleById);
-r.post('/', authorize('SALLE_CREATE'), createSalle);
-r.put('/:id', authorize('SALLE_UPDATE'), updateSalle);
-r.delete('/:id', authorize('SALLE_DELETE'), deleteSalle);
+r.get('/', checkPermission("SALLE_VIEW"), listSalles);
+r.get('/:id', checkPermission("SALLE_VIEW"), getSalleById);
+r.post('/', checkPermission("SALLE_MANAGE"), createSalle);
+r.put('/:id', checkPermission("SALLE_MANAGE"), updateSalle);
+r.delete('/:id', checkPermission("SALLE_MANAGE"), deleteSalle);
 
 export default r;

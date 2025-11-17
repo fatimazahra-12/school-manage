@@ -5,11 +5,10 @@ import {
   createNiveau,
   updateNiveau,
   deleteNiveau
-} from '../controllers/niveauController';
+} from "../controllers/niveauController.js";
 
 const router = express.Router();
 
-// Base path: /api/niveaux
 router.get('/', getAllNiveaux);
 router.get('/:id', getNiveauById);
 router.post('/', createNiveau);

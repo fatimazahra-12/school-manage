@@ -1,13 +1,11 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
-import {
-  listPlanning, createPlanning, deletePlanning,
-} from '../controllers/planningController';
+import { checkPermission } from "../middlewares/roleMiddleware.js";
+import { listPlanning, createPlanning, deletePlanning } from "../controllers/planningController.js";
 
 const r = Router();
 
-r.get('/', authorize('PLANNING_READ'), listPlanning);
-r.post('/', authorize('PLANNING_CREATE'), createPlanning);
-r.delete('/:id', authorize('PLANNING_DELETE'), deletePlanning);
+r.get('/', checkPermission("PLANNING_VIEW"), listPlanning);
+r.post('/', checkPermission("PLANNING_MANAGE"), createPlanning);
+r.delete('/:id', checkPermission("PLANNING_MANAGE"), deletePlanning);
 
 export default r;
