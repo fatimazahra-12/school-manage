@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { TwoFactorService } from "../services/TwofactorService";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../config/prisma";
 import { ResponseHandler } from "../utils/responseHandler";
 import qrcode from "qrcode";
-
-const prisma = new PrismaClient();
 
 export class TwoFactorController {
 
