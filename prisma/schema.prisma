@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,36 +8,37 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  nom          String
-  email        String    @unique
-  mot_de_passe String
-  role_id      Int
-  is_verified  Boolean   @default(false)
-  is_active    Boolean   @default(true)
-  last_login   DateTime?
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-
-  role           Role             @relation(fields: [role_id], references: [id])
-  refreshTokens  RefreshToken[]
-  settings       Settings?
-  notifications  Notification[]
-  modules        Module[]         @relation("EnseignantModules")
-  cours          Cours[]          @relation("EnseignantCours")
-  notes          Note[]
-  absences       Absence[]
-  groupes        EtudiantGroupe[]
-  passwordResets PasswordReset[]
-  actualites     Actualite[]
+  id                    Int              @id @default(autoincrement())
+  nom                   String
+  email                 String           @unique
+  mot_de_passe          String
+  role_id               Int
+  is_verified           Boolean          @default(false)
+  is_active             Boolean          @default(true)
+  last_login            DateTime?
+  created_at            DateTime         @default(now())
+  updated_at            DateTime         @updatedAt
+  is_two_factor_enabled Boolean          @default(false)
+  two_factor_secret     String?
+  absences              Absence[]
+  actualites            Actualite[]
+  cours                 Cours[]          @relation("EnseignantCours")
+  groupes               EtudiantGroupe[]
+  modules               Module[]         @relation("EnseignantModules")
+  notes                 Note[]
+  notifications         Notification[]
+  passwordResets        PasswordReset[]
+  refreshTokens         RefreshToken[]
+  settings              Settings?
+  role                  Role             @relation(fields: [role_id], references: [id])
 }
 
 model Role {
   id              Int              @id @default(autoincrement())
   nom             String
   description     String?
-  users           User[]
   rolePermissions RolePermission[]
+  users           User[]
 }
 
 model Permission {
@@ -56,12 +50,11 @@ model Permission {
 }
 
 model RolePermission {
-  id            Int @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   role_id       Int
   permission_id Int
-
-  role       Role       @relation(fields: [role_id], references: [id])
-  permission Permission @relation(fields: [permission_id], references: [id])
+  permission    Permission @relation(fields: [permission_id], references: [id])
+  role          Role       @relation(fields: [role_id], references: [id])
 }
 
 model RefreshToken {
@@ -71,20 +64,18 @@ model RefreshToken {
   expires_at DateTime
   revoked    Boolean  @default(false)
   created_at DateTime @default(now())
-
-  user User @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 }
 
 model PasswordReset {
   id         Int      @id @default(autoincrement())
   user_id    Int
   code       String
-  type       String // "verify" or "reset"
+  type       String
   expires_at DateTime
   used       Boolean  @default(false)
   created_at DateTime @default(now())
-
-  user User @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 }
 
 model Filiere {
@@ -97,52 +88,49 @@ model Filiere {
 }
 
 model Groupe {
-  id         Int    @id @default(autoincrement())
+  id         Int              @id @default(autoincrement())
   nom        String
   niveau     String
   annee      String
   filiere_id Int
-
-  filiere   Filiere          @relation(fields: [filiere_id], references: [id])
-  etudiants EtudiantGroupe[]
-  cours     Cours[]
+  cours      Cours[]
+  etudiants  EtudiantGroupe[]
+  filiere    Filiere          @relation(fields: [filiere_id], references: [id])
 }
 
 model EtudiantGroupe {
-  id          Int @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   etudiant_id Int
   groupe_id   Int
-
-  etudiant User   @relation(fields: [etudiant_id], references: [id])
-  groupe   Groupe @relation(fields: [groupe_id], references: [id])
+  etudiant    User   @relation(fields: [etudiant_id], references: [id])
+  groupe      Groupe @relation(fields: [groupe_id], references: [id])
 }
 
 model Module {
-  id            Int    @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   nom           String
   code          String
   coefficient   Float
   filiere_id    Int
   enseignant_id Int
-
-  filiere    Filiere  @relation(fields: [filiere_id], references: [id])
-  enseignant User     @relation("EnseignantModules", fields: [enseignant_id], references: [id])
-  cours      Cours[]
-  examens    Examen[]
+  cours         Cours[]
+  examens       Examen[]
+  enseignant    User     @relation("EnseignantModules", fields: [enseignant_id], references: [id])
+  filiere       Filiere  @relation(fields: [filiere_id], references: [id])
 }
 
 model Salle {
   id         Int      @id @default(autoincrement())
   nom        String
   capacite   Int
-  type       String // ex: "amphi", "labo", "classe"
+  type       String
   disponible Boolean  @default(true)
   cours      Cours[]
   examens    Examen[]
 }
 
 model Cours {
-  id            Int      @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   module_id     Int
   enseignant_id Int
   salle_id      Int
@@ -151,13 +139,12 @@ model Cours {
   date_cours    DateTime
   heure_debut   DateTime
   heure_fin     DateTime
-
-  module     Module     @relation(fields: [module_id], references: [id])
-  enseignant User       @relation("EnseignantCours", fields: [enseignant_id], references: [id])
-  salle      Salle      @relation(fields: [salle_id], references: [id])
-  groupe     Groupe     @relation(fields: [groupe_id], references: [id])
-  absences   Absence[]
-  planning   Planning[]
+  absences      Absence[]
+  enseignant    User       @relation("EnseignantCours", fields: [enseignant_id], references: [id])
+  groupe        Groupe     @relation(fields: [groupe_id], references: [id])
+  module        Module     @relation(fields: [module_id], references: [id])
+  salle         Salle      @relation(fields: [salle_id], references: [id])
+  planning      Planning[]
 }
 
 model Examen {
@@ -167,10 +154,9 @@ model Examen {
   date_examen DateTime
   type        String
   coefficient Float
-
-  module Module @relation(fields: [module_id], references: [id])
-  salle  Salle  @relation(fields: [salle_id], references: [id])
-  notes  Note[]
+  module      Module   @relation(fields: [module_id], references: [id])
+  salle       Salle    @relation(fields: [salle_id], references: [id])
+  notes       Note[]
 }
 
 model Note {
@@ -179,9 +165,8 @@ model Note {
   etudiant_id Int
   note        Float
   remarque    String?
-
-  examen   Examen @relation(fields: [examen_id], references: [id])
-  etudiant User   @relation(fields: [etudiant_id], references: [id])
+  etudiant    User    @relation(fields: [etudiant_id], references: [id])
+  examen      Examen  @relation(fields: [examen_id], references: [id])
 }
 
 model Absence {
@@ -191,9 +176,8 @@ model Absence {
   date        DateTime
   motif       String?
   justifiee   Boolean  @default(false)
-
-  cours    Cours @relation(fields: [cours_id], references: [id])
-  etudiant User  @relation(fields: [etudiant_id], references: [id])
+  cours       Cours    @relation(fields: [cours_id], references: [id])
+  etudiant    User     @relation(fields: [etudiant_id], references: [id])
 }
 
 model Planning {
@@ -202,8 +186,7 @@ model Planning {
   jour        String
   heure_debut DateTime
   heure_fin   DateTime
-
-  cours Cours @relation(fields: [cours_id], references: [id])
+  cours       Cours    @relation(fields: [cours_id], references: [id])
 }
 
 model Actualite {
@@ -214,14 +197,7 @@ model Actualite {
   type      TypeActualite
   date_pub  DateTime      @default(now())
   auteur_id Int
-
-  auteur User @relation(fields: [auteur_id], references: [id])
-}
-
-enum TypeActualite {
-  EVENEMENT
-  ANNONCE
-  INFO
+  auteur    User          @relation(fields: [auteur_id], references: [id])
 }
 
 model Notification {
@@ -232,8 +208,7 @@ model Notification {
   type       String
   statut     String   @default("non_lu")
   created_at DateTime @default(now())
-
-  user User @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 }
 
 model Settings {
@@ -245,6 +220,11 @@ model Settings {
   format_date            String   @default("dd/MM/yyyy")
   created_at             DateTime @default(now())
   updated_at             DateTime @updatedAt
+  user                   User     @relation(fields: [user_id], references: [id])
+}
 
-  user User @relation(fields: [user_id], references: [id])
+enum TypeActualite {
+  EVENEMENT
+  ANNONCE
+  INFO
 }

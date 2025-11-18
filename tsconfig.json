@@ -1,36 +1,18 @@
 {
   "compilerOptions": {
-    /* === Fichiers & sorties === */
+    "target": "ES2020",
+    "module": "commonjs",
     "rootDir": "src",
     "outDir": "dist",
-
-    /* === Module & environnement === */
-    "module": "nodenext",
-    "target": "esnext",
-    "moduleResolution": "nodenext",
-    "lib": ["esnext"],
-    "types": ["node"],
-
-    /* === Compatibilité ESM / CommonJS === */
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": false, // désactive pour corriger les imports
-
-    /* === Options de build === */
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
     "skipLibCheck": true,
-
-    /* === Type checking strict === */
+    "esModuleInterop": true,
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    /* === Autres === */
-    "moduleDetection": "force",
-    "isolatedModules": true
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ]
   },
-  "include": ["src", "prisma.config.ts"],
-  "exclude": ["node_modules", "dist"]
-}
+"include": [
+    "src",
+    "src/@types"   // <= add this line (or whatever path you used)
+  ]}
