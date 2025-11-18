@@ -22,11 +22,13 @@ const accessExpiresIn: SignOptions['expiresIn'] = (AUTH_SECRET_EXPIRES_IN ?? "15
 const refreshExpiresIn: SignOptions['expiresIn'] = (AUTH_REFRESH_SECRET_EXPIRES_IN ?? "24h") as unknown as SignOptions['expiresIn'];
 const resetExpiresIn: SignOptions['expiresIn'] = (RESET_EXPIRES_IN ?? "15m") as unknown as SignOptions['expiresIn'];
 
-
+const accessTokenOptions: SignOptions = { expiresIn: accessExpiresIn ?? "15m" };
+const refreshTokenOptions: SignOptions = { expiresIn: refreshExpiresIn ?? "24h"};
+const resetTokenOptions: SignOptions = { expiresIn: resetExpiresIn ?? "15m" };
 
 // Generate access token
 export const generateAccessToken = (payload: object) =>
-  jwt.sign(payload, accessSecret, { expiresIn: accessExpiresIn });
+  jwt.sign(payload, accessSecret, accessTokenOptions);
 
 // Verify access token
 export const verifyAccessToken = (token: string) =>
@@ -34,7 +36,7 @@ export const verifyAccessToken = (token: string) =>
 
 // Generate refresh token
 export const generateRefreshToken = (payload: object) =>
-  jwt.sign(payload, refreshSecret, { expiresIn: refreshExpiresIn });
+  jwt.sign(payload, refreshSecret, refreshTokenOptions);
 
 // Verify refresh token
 export const verifyRefreshToken = (token: string) =>
@@ -42,7 +44,7 @@ export const verifyRefreshToken = (token: string) =>
 
 // Generate reset password token
 export const generateResetToken = (payload: object) =>
-  jwt.sign(payload, resetSecret, { expiresIn: resetExpiresIn });
+  jwt.sign(payload, resetSecret, resetTokenOptions);
 
 // Verify reset token
 export const verifyResetToken = (token: string) =>

@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../config/prisma.js";
 
-const prisma = new PrismaClient();
-
-// 🔹 Check if username or email already exists
+// Check if username or email already exists
 export const checkDuplicateUsernameOrEmail = async (
   req: Request,
   res: Response,
@@ -13,7 +11,7 @@ export const checkDuplicateUsernameOrEmail = async (
     const { nom, email } = req.body;
 
     if (nom) {
-      const userByName = await prisma.user.findFirst({ where: { firstName: nom } });
+      const userByName = await prisma.user.findFirst({ where: { nom: nom } });
       if (userByName) {
         return res.status(400).json({ message: "Failed! Name is already in use!" });
       }
@@ -32,7 +30,7 @@ export const checkDuplicateUsernameOrEmail = async (
   }
 };
 
-// 🔹 Check if the role exists
+// Check if the role exists
 export const checkRoleExisted = async (
   req: Request,
   res: Response,
