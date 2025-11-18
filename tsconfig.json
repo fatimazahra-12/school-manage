@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    // "target": "ES2020",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "rootDir": "src",
@@ -16,6 +17,6 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", "src/@types"],
+  "exclude": ["node_modules", "dist"],
 }

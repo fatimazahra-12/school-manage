@@ -9,9 +9,17 @@ import filiereRoutes from "./routes/filiereRoute.js";
 import coursRoutes from "./routes/coursRoute.js";
 import planningRoutes from "./routes/planningRoute.js";
 import groupeRoutes from "./routes/groupRoute.js";
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/authRoute";
+import twoFactorRoutes from "./routes/TwoFactorRoute";
+
+
 
 const app = express();
+const PORT = process.env.PORT || 8081;
+
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/candidatures", candidatRoutes)
 app.use("/api/modules", moduleRoute);
@@ -23,17 +31,9 @@ app.use("/api/filieres", filiereRoutes);
 app.use("/api/cours", coursRoutes);
 app.use("/api/plannings", planningRoutes);
 app.use("/api/groupes", groupeRoutes);
-
-const PORT = process.env.PORT || 8081;
+app.use("/api/auth", authRoutes);
+app.use("/api/2fa", twoFactorRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur en écoute sur http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-
-
