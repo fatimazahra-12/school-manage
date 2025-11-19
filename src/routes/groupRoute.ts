@@ -1,15 +1,15 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
+import { checkPermission } from "../middlewares/roleMiddleware.js";
 import {
   listGroupes, getGroupeById, createGroupe, updateGroupe, deleteGroupe,
-} from '../controllers/groupeController';
+} from "../controllers/groupeController.js";
 
 const r = Router();
 
-r.get('/', authorize('GROUPE_READ'), listGroupes);
-r.get('/:id', authorize('GROUPE_READ'), getGroupeById);
-r.post('/', authorize('GROUPE_CREATE'), createGroupe);
-r.put('/:id', authorize('GROUPE_UPDATE'), updateGroupe);
-r.delete('/:id', authorize('GROUPE_DELETE'), deleteGroupe);
+r.get('/', checkPermission("GROUPE_VIEW"), listGroupes);
+r.get('/:id', checkPermission("GROUPE_VIEW"), getGroupeById);
+r.post('/', checkPermission("GROUPE_MANAGE"), createGroupe);
+r.put('/:id', checkPermission("GROUPE_MANAGE"), updateGroupe);
+r.delete('/:id', checkPermission("GROUPE_MANAGE"), deleteGroupe);
 
 export default r;
