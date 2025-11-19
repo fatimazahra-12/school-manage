@@ -7,6 +7,7 @@
     "dev": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/index.ts\"",
     "build": "tsc",
     "start": "node dist/src/index.js",
+    "prisma:generate": "prisma generate",
     "test": "echo \"No tests yet\" && exit 0"
   },
   "keywords": [],
