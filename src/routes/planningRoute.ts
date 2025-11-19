@@ -1,11 +1,19 @@
 import { Router } from 'express';
-import { checkPermission } from "../middlewares/roleMiddleware.js";
-import { listPlanning, createPlanning, deletePlanning } from "../controllers/planningController.js";
+import { checkPermission } from '../middlewares/roleMiddleware';
+import {
+  listPlanning,
+  getPlanning,
+  createPlanning,
+  updatePlanning,
+  deletePlanning,
+} from '../controllers/planningController';
 
-const r = Router();
+const router = Router();
 
-r.get('/', checkPermission("PLANNING_VIEW"), listPlanning);
-r.post('/', checkPermission("PLANNING_MANAGE"), createPlanning);
-r.delete('/:id', checkPermission("PLANNING_MANAGE"), deletePlanning);
+router.get('/', checkPermission('PLANNING_VIEW'), listPlanning);
+router.get('/:id', checkPermission('PLANNING_VIEW'), getPlanning);
+router.post('/', checkPermission('PLANNING_MANAGE'), createPlanning);
+router.put('/:id', checkPermission('PLANNING_MANAGE'), updatePlanning);
+router.delete('/:id', checkPermission('PLANNING_MANAGE'), deletePlanning);
 
-export default r;
+export default router;
