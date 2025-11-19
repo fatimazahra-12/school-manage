@@ -30,7 +30,7 @@
   "src/routes/filiereRoute.ts",
   "src/controllers/filiereController.ts",
   "src/middlewares/authorize.ts",
-  "prismaClient.ts",
+  "src/prismaClient.ts",
   "prisma.config.ts"
   ],
   "exclude": ["node_modules", "dist"]
