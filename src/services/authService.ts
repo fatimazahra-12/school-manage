@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 import {
   generateAccessToken,
+  generateResetToken,
   generateRefreshToken,
   verifyRefreshToken,
   verifyResetToken,
@@ -140,7 +141,7 @@ export class AuthService {
 
     const resetSecret = process.env.RESET_SECRET;
 
-    const resetToken = generateAccessToken({ id: user.id }); 
+    const resetToken = generateResetToken({ id: user.id }); 
     console.log("==== RESET TOKEN GENERATED ====");
     console.log("RESET_SECRET USED TO SIGN:", resetSecret);
     console.log("RESET TOKEN:", resetToken);

@@ -1,11 +1,10 @@
 import express from "express";
-import "dotenv/config";
+import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/authRoute";
 import twoFactorRoutes from "./routes/TwoFactorRoute";
-
-
+dotenv.config();
 
 const app = express();
 app.use(express.json());

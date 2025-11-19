@@ -1,7 +1,6 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken, verifyRefreshToken, generateAccessToken } from "../utils/Jwt";
-import prisma from "../config/prisma"; // use your prisma client singleton
+import prisma from "../config/prisma"; 
 import { ResponseHandler } from "../utils/responseHandler";
 
 interface AuthRequest extends Request {
@@ -18,7 +17,16 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     const token = authHeader.split(" ")[1];
 
     try {
-      const decoded = verifyAccessToken(token) as { id: number; email: string; roleId: number };
+          const token = authHeader.split(" ")[1];
+    if (!token) {
+      return ResponseHandler.error(res, "Token manquant", 401);
+    }
+
+    const decoded = verifyAccessToken(token) as {
+      id: number;
+      email: string;
+      roleId: number;
+    };
       req.user = { id: Number(decoded.id), email: decoded.email, roleId: Number(decoded.roleId) };
       return next();
     } catch (err: any) {
