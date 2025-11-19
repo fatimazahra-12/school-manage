@@ -1,7 +1,6 @@
-// src/middlewares/authMiddleware.ts
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken, verifyRefreshToken, generateAccessToken } from "../utils/Jwt";
-import prisma from "../config/prisma"; // use your prisma client singleton
+import prisma from "../config/prisma"; 
 import { ResponseHandler } from "../utils/responseHandler";
 
 interface AuthRequest extends Request {
