@@ -1,33 +1,27 @@
 {
   "compilerOptions": {
-    /* === Fichiers & sorties === */
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist",
 
-    /* === Module & environnement === */
-    "module": "nodenext",
-    "target": "esnext",
-    "moduleResolution": "nodenext",
+    "module": "commonjs",
+    "target": "ES2022",
+    "moduleResolution": "node",
     "lib": ["esnext"],
     "types": ["node"],
 
-    /* === Compatibilité ESM / CommonJS === */
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": false, // désactive pour corriger les imports
+    "verbatimModuleSyntax": false,
 
-    /* === Options de build === */
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
     "skipLibCheck": true,
 
-    /* === Type checking strict === */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
-    /* === Autres === */
     "moduleDetection": "force",
     "isolatedModules": true
   },
