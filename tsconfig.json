@@ -25,6 +25,13 @@
     "moduleDetection": "force",
     "isolatedModules": true
   },
-  "include": ["src", "prisma.config.ts"],
+  "include": [
+  "src/index.ts",
+  "src/routes/filiereRoute.ts",
+  "src/controllers/filiereController.ts",
+  "src/middlewares/authorize.ts",
+  "prismaClient.ts",
+  "prisma.config.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
