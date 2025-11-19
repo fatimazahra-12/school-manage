@@ -7,8 +7,8 @@
 //   });
 
 import express from 'express';
-import candidatRoutes from "../src/routes/candidatRoute.js"
-import moduleRoute from "../src/routes/moduleRoute.js";
+import candidatRoutes from "./routes/candidatRoute.js"
+import moduleRoute from "./routes/moduleRoute.js";
 import examenRoute from "./routes/examRoute.js";
 import noteRoute from "./routes/noteRoute.js";
 import niveauRoute from "./routes/niveauRoute.js";
@@ -19,10 +19,10 @@ import planningRoutes from "./routes/planningRoute.js";
 import groupeRoutes from "./routes/groupRoute.js";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoute";
-import twoFactorRoutes from "./routes/TwoFactorRoute";
-import roleRoutes from "../src/routes/roleRoute.js";
-import permissionRoutes from "../src/routes/permissionRoute.js";
-import rolePermissionRoutes from "../src/routes/rolepermissionRoute.js";
+import twoFactorRoutes from "./routes/TwoFactorRoute.js";
+import roleRoutes from "./routes/roleRoute.js";
+import permissionRoutes from "./routes/permissionRoute.js";
+import rolePermissionRoutes from "./routes/rolepermissionRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import absenceRoutes from "./routes/absenceRoute.js";
 import dotenv from "dotenv";

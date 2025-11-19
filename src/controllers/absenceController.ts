@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "../generated/prisma/client.js";
-
-const prisma = new PrismaClient();
-
-export default prisma;
+import prisma from "../config/prisma.js";
 
 //  Obtenir toutes les absences
 export const getAllAbsences = async (req: Request, res: Response) => {
