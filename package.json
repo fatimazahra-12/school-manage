@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "School management system backend",
   "main": "dist/index.js",
-
   "scripts": {
     "dev": "nodemon --exec tsx src/index.ts",
     "build": "tsc",

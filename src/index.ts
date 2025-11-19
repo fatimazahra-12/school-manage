@@ -23,7 +23,8 @@ import twoFactorRoutes from "./routes/TwoFactorRoute";
 import roleRoutes from "../src/routes/roleRoute.js";
 import permissionRoutes from "../src/routes/permissionRoute.js";
 import rolePermissionRoutes from "../src/routes/rolepermissionRoute.js";
-
+import userRoutes from "./routes/userRoute.js";
+import absenceRoutes from "./routes/absenceRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -46,6 +47,8 @@ app.use("/api/2fa", twoFactorRoutes);
 app.use("/api/roles", roleRoutes);
 app.use("/api/permissions", permissionRoutes);
 app.use("/api/role-permissions", rolePermissionRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/absences", absenceRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur en écoute sur http://localhost:${PORT}`);
