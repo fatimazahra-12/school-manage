@@ -1,13 +1,18 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
 import {
-  listPlanning, createPlanning, deletePlanning,
+  listPlanning,
+  getPlanning,
+  createPlanning,
+  updatePlanning,
+  deletePlanning,
 } from '../controllers/planningController';
 
-const r = Router();
+const router = Router();
 
-r.get('/', authorize('PLANNING_READ'), listPlanning);
-r.post('/', authorize('PLANNING_CREATE'), createPlanning);
-r.delete('/:id', authorize('PLANNING_DELETE'), deletePlanning);
+router.get('/', listPlanning);
+router.get('/:id', getPlanning);
+router.post('/', createPlanning);
+router.put('/:id', updatePlanning);
+router.delete('/:id', deletePlanning);
 
-export default r;
+export default router;
