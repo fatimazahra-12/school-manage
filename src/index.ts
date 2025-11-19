@@ -25,6 +25,9 @@ import permissionRoutes from "../src/routes/permissionRoute.js";
 import rolePermissionRoutes from "../src/routes/rolepermissionRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import absenceRoutes from "./routes/absenceRoute.js";
+import dotenv from "dotenv";
+dotenv.config();
+
 
 const app = express();
 const PORT = process.env.PORT || 8081;

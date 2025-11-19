@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../config/prisma";
 import bcrypt from "bcrypt";
 import { sendMail } from "./mailService";
 import jwt from "jsonwebtoken";
@@ -11,7 +11,6 @@ import {
   verifyAccessToken,
 } from "../utils/Jwt";
 
-const prisma = new PrismaClient();
 
 interface SignupData {
   nom: string;
