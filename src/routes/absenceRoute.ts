@@ -6,14 +6,15 @@ import {
   updateAbsence,
   deleteAbsence,
 } from "../controllers/absenceController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 
 const router = Router();
 
-router.get("/", getAllAbsences);
-router.get("/:id", getAbsenceById);
-router.post("/", createAbsence);
-router.put("/:id", updateAbsence);
-router.delete("/:id", deleteAbsence);
+router.get("/", authMiddleware, getAllAbsences);
+router.get("/:id",authMiddleware, getAbsenceById);
+router.post("/", authMiddleware, createAbsence);
+router.put("/:id", authMiddleware, updateAbsence);
+router.delete("/:id", authMiddleware, deleteAbsence);
 
 export default router;
