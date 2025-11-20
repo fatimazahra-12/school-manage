@@ -1,5 +1,8 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import filiereRouter from './routes/filiereRoute';
+
+dotenv.config();  // This loads the environment variables from the .env file
 
 const app = express();
 app.use(express.json());

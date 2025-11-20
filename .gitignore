@@ -1,6 +1,10 @@
 node_modules
-# Keep environment variables out of version control
+
 /dist
 .env
 
 /src/generated/prisma
+
+prisma.config.js
+prisma.config.d.ts
+prisma.config.js.map
