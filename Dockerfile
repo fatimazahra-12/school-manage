@@ -1,5 +1,5 @@
 # Build Stage (Node.js + TypeScript)
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -24,7 +24,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # Run Stage (Smaller image)
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 

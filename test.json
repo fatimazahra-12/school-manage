@@ -1,0 +1,64 @@
+{
+    "users": {
+        "post":"http://localhost:8081/api/users",
+        "get":"http://localhost:8081/api/users/",
+        "get":"http://localhost:8081/api/users/:id",
+        "put":"http://localhost:8081/api/users/:id",
+        "delete":"http://localhost:8081/api/users/:id",
+        "get":"http://localhost:8081/api/users/groupe/1/etudiants",
+        "get":"http://localhost:8081/api/users/role/admin"
+    },
+    "absence": {
+        "post":"http://localhost:8081/api/absences",
+        "get":"http://localhost:8081/api/absences/",
+        "get":"http://localhost:8081/api/absences/:id",
+        "put":"http://localhost:8081/api/absences/:id",
+        "delete":"http://localhost:8081/api/absences/:id"
+    },
+    "module": {
+        "post":"http://localhost:8081/api/modules",
+        "get":"http://localhost:8081/api/modules",
+        "get":"http://localhost:8081/api/modules/:id",
+        "put":"http://localhost:8081/api/modules/:id",
+        "delete":"http://localhost:8081/api/modules/:id"
+    },
+    "note": {
+        "post":"http://localhost:8081/api/notes",
+        "get":"http://localhost:8081/api/notes",
+        "get":"http://localhost:8081/api/notes/:id",
+        "put":"http://localhost:8081/api/notes/:id",
+        "delete":"http://localhost:8081/api/notes/:id"
+    },
+    "exams": {
+        "post":"http://localhost:8081/api/examens",
+        "get":"http://localhost:8081/api/examens",
+        "get":"http://localhost:8081/api/examens/:id",
+        "put":"http://localhost:8081/api/examens/:id",
+        "delete":"http://localhost:8081/api/examens/:id"
+    },
+    "auth": {
+        "post":"http://localhost:8081/api/auth/signup",
+        "get":"http://localhost:8081/api/auth/verify/{token}",
+        "post":"http://localhost:8081/api/auth/signin",
+        "post":"http://localhost:8081/api/auth/refresh-token",
+        "post":"http://localhost:8081/api/auth/logout",
+        "post":"http://localhost:8081/api/auth/forgot-password",
+        "post":"http://localhost:8081/api/auth/reset-password/{token}",
+        "post":"http://localhost:8081/api/2fa/enable-2fa",
+        "post":"http://localhost:8081/api/2fa/verify-2fa"
+    },
+    "niveau": {
+        "post":"http://localhost:8081/api/niveaux",
+        "get":"http://localhost:8081/api/niveaux",
+        "get":"http://localhost:8081/api/niveaux/:id",
+        "put":"http://localhost:8081/api/niveaux/:id",
+        "delete":"http://localhost:8081/api/niveaux/:id"
+    },
+    "salle": {
+        "post":"http://localhost:8081/api/salles",
+        "get":"http://localhost:8081/api/salles",
+        "get":"http://localhost:8081/api/salles/:id",
+        "put":"http://localhost:8081/api/salles/:id",
+        "delete":"http://localhost:8081/api/salles/:id"
+    }
+}
