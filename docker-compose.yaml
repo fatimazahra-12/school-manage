@@ -12,24 +12,25 @@ services:
     ports:
       - "5005:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     networks:
       - school-net
 
   app:
     build: .
     container_name: schoolmanage_app
-    restart: always
+    # restart: always
     ports:
       - "3500:3500"
     environment:
-      DATABASE_URL: postgresql://postgres:123456789@postgres:5432/school_management
+      DATABASE_URL: postgresql://postgres:123456789@schoolmanage_postgres:5432/school_management
       NODE_ENV: development
+      
     depends_on:
       - postgres
     networks:
       - school-net
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && node dist/index.js"
+    command: sh -c "npm run dev"
 
 volumes:
   postgres_data:

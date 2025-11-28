@@ -1,41 +1,31 @@
-# Build Stage (Node.js + TypeScript)
-FROM node:24-alpine AS builder
+# Dev Stage
+FROM node:24-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files
+# Install OS dependencies needed by Prisma
+RUN apk add --no-cache openssl
+
+# Copy dependency files first for faster caching
 COPY package*.json ./
 COPY prisma ./prisma
 
-# Install dependencies
+# Install all dependencies (including dev)
 RUN npm install
 
-# Copy source files
+# Copy source code
 COPY . .
 
-# Provide DATABASE_URL for build
-ENV DATABASE_URL="postgresql://postgres:123456789@postgres:5432/school_management"
-
-# Generate Prisma client
-RUN npx prisma generate
-
-# Build TypeScript
-RUN npm run build
-
-# Run Stage (Smaller image)
-FROM node:24-alpine
-
-WORKDIR /app
-
-# Copy only needed files from builder
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
-
-# Expose app port
+# Expose API port
 EXPOSE 3500
 
-# Default command
-CMD ["node", "dist/index.js"]
+# Environment variables for Prisma
+# (Prisma only needs this for generate/migrate, compose will override this)
+ENV DATABASE_URL="postgresql://postgres:123456789@schoolmanage_postgres:5432/school_management"
+
+# Run Prisma generate so dev container always has an up-to-date client
+RUN npx prisma generate
+
+# Default dev command (hot reload)
+CMD ["npm", "run", "dev"]
