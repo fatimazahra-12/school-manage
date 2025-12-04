@@ -54,12 +54,14 @@ model User {
   last_login     DateTime?
   created_at     DateTime         @default(now())
   updated_at     DateTime         @updatedAt
+  is_two_factor_enabled Boolean          @default(false)
+  two_factor_secret     String?
   candidats      Candidat[]       @relation("UserCandidats")
   absences       Absence[]
   actualites     Actualite[]
   cours          Cours[]          @relation("EnseignantCours")
-  groupeId Int
-  groupe         Groupe @relation(fields: [groupeId], references: [id])
+  groupeId Int?
+  groupe         Groupe? @relation(fields: [groupeId], references: [id])
   modules        Module[]         @relation("EnseignantModules")
   notes          Note[]
   notifications  Notification[]
@@ -135,7 +137,8 @@ model Filiere {
   niveaux     Niveau[]
   groupes     Groupe[]
   modules     Module[]
-  candidats   Candidat[]  // Added relation field for Candidat
+  candidats   Candidat[]  
+  ressources  Ressource[]
 }
 
 model Groupe {
@@ -161,6 +164,7 @@ model Module {
   cours         Cours[]
   examens       Examen[]
   ressources    Ressource[]
+  
   enseignant    User     @relation("EnseignantModules", fields: [enseignant_id], references: [id])
   filiere       Filiere  @relation(fields: [filiere_id], references: [id])
 }
@@ -175,9 +179,11 @@ model Ressource {
 
   module_id     Int
   enseignant_id Int
+  filiere_id    Int
 
   module        Module    @relation(fields: [module_id], references: [id])
   enseignant    User      @relation("EnseignantRessources", fields: [enseignant_id], references: [id])
+  filiere       Filiere  @relation(fields: [filiere_id], references: [id])
 }
 
 model Salle {
