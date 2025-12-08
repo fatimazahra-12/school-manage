@@ -1,15 +1,21 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
 import {
-  listSalles, getSalleById, createSalle, updateSalle, deleteSalle,
-} from '../controllers/salleController';
+    listSalles, getSalleById, createSalle, updateSalle, deleteSalle,
+    getSalleDispo, searchSalles, getSallesByType
+} from "../controllers/salleController.js";
+import { checkPermission } from "../middlewares/roleMiddleware.js";
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const r = Router();
 
-r.get('/', authorize('SALLE_READ'), listSalles);
-r.get('/:id', authorize('SALLE_READ'), getSalleById);
-r.post('/', authorize('SALLE_CREATE'), createSalle);
-r.put('/:id', authorize('SALLE_UPDATE'), updateSalle);
-r.delete('/:id', authorize('SALLE_DELETE'), deleteSalle);
+r.get('/search', authMiddleware, checkPermission("SALLE_VIEW"), searchSalles);
+r.get('/disponibles', authMiddleware, checkPermission("SALLE_VIEW"), getSalleDispo);
+r.get('/type/:type', authMiddleware, checkPermission("SALLE_VIEW"), getSallesByType);
+
+r.get('/', authMiddleware, checkPermission("SALLE_VIEW"), listSalles);
+r.get('/:id', authMiddleware, checkPermission("SALLE_VIEW"), getSalleById);
+r.post('/', authMiddleware, checkPermission("SALLE_MANAGE"), createSalle);
+r.put('/:id', authMiddleware, checkPermission("SALLE_MANAGE"), updateSalle);
+r.delete('/:id', authMiddleware, checkPermission("SALLE_MANAGE"), deleteSalle);
 
 export default r;
