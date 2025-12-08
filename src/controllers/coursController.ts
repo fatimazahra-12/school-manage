@@ -194,3 +194,199 @@ export async function deleteCours(req: Request, res: Response) {
     return res.status(500).json({ error: "Failed to delete cours" });
   }
 }
+
+// Get all cours for a specific groupe
+export async function getCoursByGroupe(req: Request, res: Response) {
+  try {
+    const groupe_id = Number(req.params.groupe_id);
+    const data = await prisma.cours.findMany({
+      where: { groupe_id },
+      include: {
+        module: true,
+        enseignant: { select: { id: true, nom: true, email: true } },
+        salle: true,
+        groupe: true,
+      },
+      orderBy: { date_cours: 'desc' },
+    });
+    return res.json(data);
+  } catch (e) {
+    console.error('getCoursByGroupe:', e);
+    return res.status(500).json({ error: 'Failed to fetch cours by groupe' });
+  }
+}
+
+// Get all cours for a specific enseignant
+export async function getCoursByEnseignant(req: Request, res: Response) {
+  try {
+    const enseignant_id = Number(req.params.enseignant_id);
+    const data = await prisma.cours.findMany({
+      where: { enseignant_id },
+      include: {
+        module: true,
+        enseignant: { select: { id: true, nom: true, email: true } },
+        salle: true,
+        groupe: true,
+      },
+      orderBy: { date_cours: 'desc' },
+    });
+    return res.json(data);
+  } catch (e) {
+    console.error('getCoursByEnseignant:', e);
+    return res.status(500).json({ error: 'Failed to fetch cours by enseignant' });
+  }
+}
+
+// Get all cours for a specific module
+export async function getCoursByModule(req: Request, res: Response) {
+  try {
+    const module_id = Number(req.params.module_id);
+    const data = await prisma.cours.findMany({
+      where: { module_id },
+      include: {
+        module: true,
+        enseignant: { select: { id: true, nom: true, email: true } },
+        salle: true,
+        groupe: true,
+      },
+      orderBy: { date_cours: 'desc' },
+    });
+    return res.json(data);
+  } catch (e) {
+    console.error('getCoursByModule:', e);
+    return res.status(500).json({ error: 'Failed to fetch cours by module' });
+  }
+}
+
+// Get all cours on a specific date
+export async function getCoursOfDay(req: Request, res: Response) {
+  try {
+    const date = req.params.date;
+    if (!date) {
+      return res.status(400).json({ error: 'Date parameter is required' });
+    }
+
+    const dateObj = new Date(date);
+
+    if (isNaN(dateObj.getTime())) {
+      return res.status(400).json({ error: 'Invalid date format' });
+    }
+
+    // Set to start and end of day
+    const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999));
+
+    const data = await prisma.cours.findMany({
+      where: {
+        date_cours: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      include: {
+        module: true,
+        enseignant: { select: { id: true, nom: true, email: true } },
+        salle: true,
+        groupe: true,
+      },
+      orderBy: { heure_debut: 'asc' },
+    });
+    return res.json(data);
+  } catch (e) {
+    console.error('getCoursOfDay:', e);
+    return res.status(500).json({ error: 'Failed to fetch cours of day' });
+  }
+}
+
+// Get cours between two dates
+export async function getCoursBetweenDates(req: Request, res: Response) {
+  try {
+    const { start, end } = req.query;
+
+    if (!start || !end) {
+      return res.status(400).json({ error: 'start and end query parameters are required' });
+    }
+
+    const startDate = new Date(start as string);
+    const endDate = new Date(end as string);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      return res.status(400).json({ error: 'Invalid date format' });
+    }
+
+    const data = await prisma.cours.findMany({
+      where: {
+        date_cours: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      include: {
+        module: true,
+        enseignant: { select: { id: true, nom: true, email: true } },
+        salle: true,
+        groupe: true,
+      },
+      orderBy: { date_cours: 'asc' },
+    });
+    return res.json(data);
+  } catch (e) {
+    console.error('getCoursBetweenDates:', e);
+    return res.status(500).json({ error: 'Failed to fetch cours between dates' });
+  }
+}
+
+// Detect cours conflicts for a groupe on a specific date/time
+export async function detectCoursConflict(req: Request, res: Response) {
+  try {
+    const { groupe_id, date, heure_debut, heure_fin } = req.body;
+
+    if (!groupe_id || !date || !heure_debut || !heure_fin) {
+      return res.status(400).json({
+        error: 'groupe_id, date, heure_debut, and heure_fin are required'
+      });
+    }
+
+    const dateObj = new Date(date);
+    const debutObj = new Date(heure_debut);
+    const finObj = new Date(heure_fin);
+
+    if (isNaN(dateObj.getTime()) || isNaN(debutObj.getTime()) || isNaN(finObj.getTime())) {
+      return res.status(400).json({ error: 'Invalid date or time format' });
+    }
+
+    // Set date range for the specific day
+    const startOfDay = new Date(dateObj.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(dateObj.setHours(23, 59, 59, 999));
+
+    // Find overlapping cours for the same groupe on the same date
+    const conflicts = await prisma.cours.findMany({
+      where: {
+        groupe_id: Number(groupe_id),
+        date_cours: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+        AND: [
+          { heure_debut: { lt: finObj } },
+          { heure_fin: { gt: debutObj } },
+        ],
+      },
+      include: {
+        module: true,
+        enseignant: { select: { id: true, nom: true, email: true } },
+        salle: true,
+        groupe: true,
+      },
+    });
+
+    return res.json({
+      has_conflict: conflicts.length > 0,
+      conflict_count: conflicts.length,
+      conflicts: conflicts,
+    });
+  } catch (e: any) {
+    console.error('detectCoursConflict:', e);
+    return res.status(500).json({ error: 'Failed to detect cours conflicts' });
+  }
+}
