@@ -1,15 +1,26 @@
 import { Router } from 'express';
-import { authorize } from '../middlewares/authorize';
+import { checkPermission } from "../middlewares/roleMiddleware.js";
 import {
   listGroupes, getGroupeById, createGroupe, updateGroupe, deleteGroupe,
-} from '../controllers/groupeController';
+  getGroupesByFiliere, getGroupesByNiveau, getGroupeWithEtudiants,
+  getGroupeWithCours, searchGroupes, countEtudiantsInGroupe, getGroupeStats
+} from "../controllers/groupeController.js";
+import { authMiddleware } from '../middlewares/authMiddleware.js';
 
 const r = Router();
 
-r.get('/', authorize('GROUPE_READ'), listGroupes);
-r.get('/:id', authorize('GROUPE_READ'), getGroupeById);
-r.post('/', authorize('GROUPE_CREATE'), createGroupe);
-r.put('/:id', authorize('GROUPE_UPDATE'), updateGroupe);
-r.delete('/:id', authorize('GROUPE_DELETE'), deleteGroupe);
+r.get('/search', authMiddleware, checkPermission("GROUPE_VIEW"), searchGroupes);
+r.get('/filiere/:filiere_id', authMiddleware, checkPermission("GROUPE_VIEW"), getGroupesByFiliere);
+r.get('/niveau/:niveau_id', authMiddleware, checkPermission("GROUPE_VIEW"), getGroupesByNiveau);
+r.get('/:id/etudiants', authMiddleware, checkPermission("GROUPE_VIEW"), getGroupeWithEtudiants);
+r.get('/:id/cours', authMiddleware, checkPermission("GROUPE_VIEW"), getGroupeWithCours);
+r.get('/:id/count-etudiants', authMiddleware, checkPermission("GROUPE_VIEW"), countEtudiantsInGroupe);
+r.get('/:id/stats', authMiddleware, checkPermission("GROUPE_VIEW"), getGroupeStats);
+
+r.get('/', authMiddleware, checkPermission("GROUPE_VIEW"), listGroupes);
+r.get('/:id', authMiddleware, checkPermission("GROUPE_VIEW"), getGroupeById);
+r.post('/', authMiddleware, checkPermission("GROUPE_MANAGE"), createGroupe);
+r.put('/:id', authMiddleware, checkPermission("GROUPE_MANAGE"), updateGroupe);
+r.delete('/:id', authMiddleware, checkPermission("GROUPE_MANAGE"), deleteGroupe);
 
 export default r;
