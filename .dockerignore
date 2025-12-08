@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.git
+.gitignore
+npm-debug.log
+yarn-error.log
+
+# Prisma
+prisma/generated/
+
+# Logs
+*.log
+
+# Build tools
+build/
+.vscode/
