@@ -37,6 +37,47 @@ export async function createPlanning(req: Request, res: Response) {
   }
 }
 
+export async function updatePlanning(req: Request, res: Response) {
+  try {
+    const id = Number(req.params.id);
+    const { cours_id, jour, heure_debut, heure_fin } = req.body as any;
+
+    // Check if planning exists
+    const existing = await prisma.planning.findUnique({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ error: `Planning ${id} not found` });
+    }
+
+    // Validate cours_id if provided
+    if (cours_id !== undefined) {
+      if (!Number.isInteger(Number(cours_id))) {
+        return res.status(400).json({ error: "Field 'cours_id' must be an integer" });
+      }
+      const cours = await prisma.cours.findUnique({ where: { id: Number(cours_id) } });
+      if (!cours) {
+        return res.status(404).json({ error: `Cours ${cours_id} not found` });
+      }
+    }
+
+    // Build update data object with only provided fields
+    const updateData: any = {};
+    if (cours_id !== undefined) updateData.cours_id = Number(cours_id);
+    if (jour !== undefined) updateData.jour = jour;
+    if (heure_debut !== undefined) updateData.heure_debut = new Date(heure_debut);
+    if (heure_fin !== undefined) updateData.heure_fin = new Date(heure_fin);
+
+    const updated = await prisma.planning.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return res.json(updated);
+  } catch (err: any) {
+    console.error('updatePlanning error:', err);
+    return res.status(500).json({ error: 'Failed to update planning', detail: err?.message });
+  }
+}
+
 export async function deletePlanning(req: Request, res: Response) {
   try {
     const id = Number(req.params.id);

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { checkPermission } from "../middlewares/roleMiddleware.js";
 import {
-    listPlanning, createPlanning, deletePlanning,
+    listPlanning, createPlanning, updatePlanning, deletePlanning,
     getPlanningByCours, getPlanningByDay, getPlanningForGroupe,
     getPlanningForEnseignant, detectPlanningConflict
 } from "../controllers/planningController.js";
@@ -16,6 +16,7 @@ r.get('/enseignant/:enseignant_id', authMiddleware, checkPermission("PLANNING_VI
 
 r.get('/', authMiddleware, checkPermission("PLANNING_VIEW"), listPlanning);
 r.post('/', authMiddleware, checkPermission("PLANNING_MANAGE"), createPlanning);
+r.put('/:id', authMiddleware, checkPermission("PLANNING_MANAGE"), updatePlanning);
 r.post('/detect-conflict', authMiddleware, checkPermission("PLANNING_VIEW"), detectPlanningConflict);
 r.delete('/:id', authMiddleware, checkPermission("PLANNING_MANAGE"), deletePlanning);
 
