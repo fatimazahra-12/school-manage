@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/prisma.js';
+
  // List all groupes
 
 export async function listGroupes(_req: Request, res: Response) {
