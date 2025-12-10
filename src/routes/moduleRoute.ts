@@ -1,33 +1,57 @@
 import { Router } from "express";
-import { ModuleController } from "../controllers/moduleController.js";
-import { checkPermission } from "../middlewares/roleMiddleware.js";
-import { authMiddleware } from "../middlewares/authMiddleware.js";
+import {
+  createModule,
+  getAllModules,
+  getModuleById,
+  updateModule,
+  deleteModule,
+  getModulesByFiliere,
+  getModulesByTeacher,
+  getModuleWithCours,
+  getModuleWithExamens,
+  searchModules,
+  getModuleStats,
+} from "../controllers/moduleController.js";
 
 const router = Router();
 
-// CRUD routes
-router.post("/", authMiddleware, checkPermission("MODULE_MANAGE"), ModuleController.createModule);
-router.get("/", authMiddleware, checkPermission("MODULE_VIEW"), ModuleController.getModules);
-router.get("/:id", authMiddleware, checkPermission("MODULE_VIEW"), ModuleController.getModuleById);
-router.put("/:id", authMiddleware, checkPermission("MODULE_MANAGE"), ModuleController.updateModule);
-router.delete("/:id", authMiddleware, checkPermission("MODULE_MANAGE"), ModuleController.deleteModule);
 
-// Filter by filiere
-router.get("/filiere/:filiere_id", authMiddleware, ModuleController.getModulesByFiliere);
 
-// Filter by teacher
-router.get("/teacher/:enseignant_id", authMiddleware, ModuleController.getModulesByTeacher);
+// Create Module
+router.post("/", createModule);
 
-// Get module with courses
-router.get("/:id/cours", authMiddleware, ModuleController.getModuleWithCours);
+// Get All Modules
+router.get("/", getAllModules);
 
-// Get module with exams
-router.get("/:id/examens", authMiddleware, ModuleController.getModuleWithExamens);
 
-// Search modules by keyword
-router.get("/search/:keyword", authMiddleware, ModuleController.searchModules);
 
-// Get module statistics
-router.get("/:id/stats", authMiddleware, ModuleController.getModuleStats);
+// Get Modules By Filiere
+router.get("/filiere/:id", getModulesByFiliere);
+
+// Get Modules By Teacher
+router.get("/teacher/:id", getModulesByTeacher);
+
+// Get Module With Cours
+router.get("/cours/:id", getModuleWithCours);
+
+// Get Module With Examens
+router.get("/examens/:id", getModuleWithExamens);
+
+// Search Modules
+router.get("/search/:key", searchModules);
+
+// Get Module Stats
+router.get("/stats/:id", getModuleStats);
+
+
+
+// Get Module By ID
+router.get("/:id", getModuleById);
+
+// Update Module
+router.put("/:id", updateModule);
+
+// Delete Module
+router.delete("/:id", deleteModule);
 
 export default router;
