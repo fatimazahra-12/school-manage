@@ -47,7 +47,7 @@ export const getExamenById = async (req: Request, res: Response) => {
       include: {
         module: true,
         salle: true,
-        notes: { include: { user: true } },
+        notes: { include: { etudiant: true } },
       },
     });
 
@@ -151,6 +151,9 @@ export const getExamensBySalle = async (req: Request, res: Response) => {
 export const getExamensOfDay = async (req: Request, res: Response) => {
   try {
     const { date } = req.params;
+    if (!date) {
+      return res.status(400).json({ success: false, error: "Date requise" });
+    }
     const parsedDate = new Date(date);
 
     if (isNaN(parsedDate.getTime())) {
@@ -229,6 +232,9 @@ export const detectExamConflict = async (req: Request, res: Response) => {
   try {
     const salle_id = Number(req.params.salle_id);
     const { date } = req.params;
+    if (!date) {
+      return res.status(400).json({ success: false, error: "Date requise" });
+    }
     const parsedDate = new Date(date);
 
     if (isNaN(salle_id)) {
@@ -265,6 +271,7 @@ export const detectExamConflict = async (req: Request, res: Response) => {
       for (let j = i + 1; j < examens.length; j++) {
         const exam1 = examens[i];
         const exam2 = examens[j];
+        if (!exam1 || !exam2) continue;
 
         const exam1End = new Date(exam1.date_examen.getTime() + 3 * 60 * 60 * 1000);
         const exam2End = new Date(exam2.date_examen.getTime() + 3 * 60 * 60 * 1000);
