@@ -1,8 +1,16 @@
 import express from 'express';
-import examenRoute from "./routes/examRoute.js";
+import moduleRoute from "./routes/moduleRoute.js";
+import noteRoute from "./routes/noteRoute.js";
+import examenRoute from "./routes/examenRoute.js";
 
 const app = express();
 app.use(express.json());
+
+// Module routes
+app.use("/api/modules", moduleRoute);
+
+// Note routes
+app.use("/api/notes", noteRoute);
 
 // Examen routes
 app.use("/api/examens", examenRoute);
