@@ -213,7 +213,7 @@ async update(req: Request, res: Response) {
         data: {
           etudiant_id,
           module_id,
-          module_nom: notes[0].examen.module.nom,
+          module_nom: notes[0]?.examen?.module?.nom || "Module inconnu",
           moyenne: Math.round(moyenne * 100) / 100,
           count: notes.length,
           notes: notes.map((n: any) => n.note),
