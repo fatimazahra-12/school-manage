@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma.js";
 
-// ==================== CRUD OPERATIONS ====================
+
 
 // Create Module
 export const createModule = async (req: Request, res: Response) => {
@@ -192,7 +192,7 @@ export const deleteModule = async (req: Request, res: Response) => {
   }
 };
 
-// ==================== FILTERS ====================
+
 
 // Get Modules By Filiere
 export const getModulesByFiliere = async (req: Request, res: Response) => {
@@ -268,7 +268,7 @@ export const getModulesByTeacher = async (req: Request, res: Response) => {
   }
 };
 
-// ==================== RELATIONS ====================
+
 
 // Get Module With Cours
 export const getModuleWithCours = async (req: Request, res: Response) => {
@@ -372,7 +372,7 @@ export const getModuleWithExamens = async (req: Request, res: Response) => {
   }
 };
 
-// ==================== SEARCH ====================
+
 
 // Search Modules
 export const searchModules = async (req: Request, res: Response) => {
@@ -434,7 +434,7 @@ export const searchModules = async (req: Request, res: Response) => {
   }
 };
 
-// ==================== STATS ====================
+
 
 // Get Module Stats
 export const getModuleStats = async (req: Request, res: Response) => {
