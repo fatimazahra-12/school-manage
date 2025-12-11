@@ -1,4 +1,7 @@
+import dotenv from "dotenv";
 import jwt, { SignOptions, Secret } from "jsonwebtoken";
+
+dotenv.config();
 
 // Load environment variables
 const {

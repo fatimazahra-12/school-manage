@@ -14,20 +14,24 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
       return ResponseHandler.error(res, "Token manquant", 401);
     }
 
-    const token = authHeader.split(" ")[1];
-
     try {
-          const token = authHeader.split(" ")[1];
-    if (!token) {
-      return ResponseHandler.error(res, "Token manquant", 401);
-    }
+      const token = authHeader.split(" ")[1];
+      if (!token) {
+        return ResponseHandler.error(res, "Token manquant", 401);
+      }
 
-    const decoded = verifyAccessToken(token) as {
-      id: number;
-      email: string;
-      roleId: number;
-    };
-      req.user = { id: Number(decoded.id), email: decoded.email, roleId: Number(decoded.roleId) };
+      const decoded = verifyAccessToken(token) as {
+        id: number;
+        email?: string;
+        roleId?: number;
+        roles?: string[];
+      };
+
+      req.user = {
+        id: Number(decoded.id),
+        email: decoded.email ?? "",
+        roleId: decoded.roleId !== undefined ? Number(decoded.roleId) : undefined as any,
+      } as any;
       return next();
     } catch (err: any) {
       if (err.name !== "TokenExpiredError") {

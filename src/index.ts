@@ -25,6 +25,7 @@ import permissionRoutes from "../src/routes/permissionRoute.js";
 import rolePermissionRoutes from "../src/routes/rolepermissionRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import absenceRoutes from "./routes/absenceRoute.js";
+import settingsRoutes from "./routes/settingsRoute";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -52,6 +53,7 @@ app.use("/api/permissions", permissionRoutes);
 app.use("/api/role-permissions", rolePermissionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/absences", absenceRoutes);
+app.use("/api/settings", settingsRoutes);
 
 app.listen(PORT, () => {
     console.log(`Serveur en écoute sur http://localhost:${PORT}`);
