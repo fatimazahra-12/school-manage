@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma.js";
 
-
-
 // Create Module
 export const createModule = async (req: Request, res: Response) => {
   try {

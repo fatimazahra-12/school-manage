@@ -12,29 +12,23 @@ import {
   searchModules,
   getModuleStats,
 } from "../controllers/moduleController.js";
+import { checkPermission } from "../middlewares/roleMiddleware.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/", createModule);
+// CRUD routes
+router.post("/", authMiddleware, checkPermission("MODULE_MANAGE"), createModule);
+router.get("/", authMiddleware, checkPermission("MODULE_VIEW"), getAllModules);
+router.get("/:id", authMiddleware, checkPermission("MODULE_VIEW"), getModuleById);
+router.put("/:id", authMiddleware, checkPermission("MODULE_MANAGE"), updateModule);
+router.delete("/:id", authMiddleware, checkPermission("MODULE_MANAGE"), deleteModule);
+router.get("/filiere/:id", authMiddleware, getModulesByFiliere);
+router.get("/teacher/:id", authMiddleware, getModulesByTeacher);
+router.get("/cours/:id", authMiddleware, getModuleWithCours);
+router.get("/examens/:id", authMiddleware, getModuleWithExamens);
+router.get("/search/:key", authMiddleware, searchModules);
+router.get("/stats/:id", authMiddleware, getModuleStats);
 
-router.get("/", getAllModules);
-
-router.get("/filiere/:id", getModulesByFiliere);
-
-router.get("/teacher/:id", getModulesByTeacher);
-
-router.get("/cours/:id", getModuleWithCours);
-
-router.get("/examens/:id", getModuleWithExamens);
-
-router.get("/search/:key", searchModules);
-
-router.get("/stats/:id", getModuleStats);
-
-router.get("/:id", getModuleById);
-
-router.put("/:id", updateModule);
-
-router.delete("/:id", deleteModule);
 
 export default router;
