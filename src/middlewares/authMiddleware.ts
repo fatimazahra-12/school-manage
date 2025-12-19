@@ -17,17 +17,28 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     const token = authHeader.split(" ")[1];
 
     try {
-          const token = authHeader.split(" ")[1];
-    if (!token) {
-      return ResponseHandler.error(res, "Token manquant", 401);
-    }
+      const decoded = verifyAccessToken(token) as {
+        id: number;
+        email?: string;
+        roleId?: number;
+        roles?: string[];
+      };
 
-    const decoded = verifyAccessToken(token) as {
-      id: number;
-      email: string;
-      roleId: number;
-    };
-      req.user = { id: Number(decoded.id), email: decoded.email, roleId: Number(decoded.roleId) };
+      // Derive roleId: prefer JWT roleId, else lookup in DB
+      let roleId = decoded.roleId;
+      let email = decoded.email;
+
+      if (!roleId || !email) {
+        const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+        roleId = roleId ?? user?.role_id;
+        email = email ?? user?.email;
+      }
+
+      if (!roleId) {
+        return ResponseHandler.error(res, "Unauthorized", 401);
+      }
+
+      req.user = { id: Number(decoded.id), email: email || "", roleId: Number(roleId) };
       return next();
     } catch (err: any) {
       if (err.name !== "TokenExpiredError") {
