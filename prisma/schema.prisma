@@ -70,6 +70,8 @@ model User {
   settings       Settings?
   ressources     Ressource[]      @relation("EnseignantRessources")
   role           Role             @relation(fields: [role_id], references: [id])
+  notificationsAsActor   Notification[]          @relation("NotificationActor")
+  notificationRecipients NotificationRecipient[]
 }
 
 model Role {
@@ -269,13 +271,46 @@ model Actualite {
 
 model Notification {
   id         Int      @id @default(autoincrement())
-  user_id    Int
+  userId    Int?
   titre      String
   message    String
   type       String
+  actor_id   Int?
+  metadata   Json?
   statut     String   @default("non_lu")
   created_at DateTime @default(now())
-  user       User     @relation(fields: [user_id], references: [id])
+  actor                  User?                   @relation("NotificationActor", fields: [actor_id], references: [id])
+  user       User?     @relation(fields: [userId], references: [id])
+  notificationRecipients NotificationRecipient[]
+}
+
+model NotificationRecipient {
+  id             Int                         @id @default(autoincrement())
+  notification   Notification                @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  notificationId Int
+  user_id        Int
+  user           User                        @relation(fields: [user_id], references: [id])
+  channel        NotificationChannel
+  statut         NotificationRecipientStatus @default(NON_LU)
+  read_at        DateTime?
+  created_at     DateTime                    @default(now())
+
+  @@unique([notificationId, user_id])
+  @@index([user_id])
+  @@index([notificationId])
+}
+
+enum NotificationRecipientStatus {
+  NON_LU
+  LU
+  ARCHIVE
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  SMS
+  PUSH
 }
 
 model Settings {
