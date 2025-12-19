@@ -15,6 +15,9 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
     }
 
     const token = authHeader.split(" ")[1];
+    if (!token) {
+      return ResponseHandler.error(res, "Token manquant", 401);
+    }
 
     try {
       const decoded = verifyAccessToken(token) as {
