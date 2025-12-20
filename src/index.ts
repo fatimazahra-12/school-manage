@@ -31,7 +31,7 @@ import rolePermissionRoutes from "./routes/rolepermissionRoute.js";
 import userRoutes from "./routes/userRoute.js";
 import absenceRoutes from "./routes/absenceRoute.js";
 import notificationRoutes from "./routes/notificationRoute.js";
-
+import settingsRoutes from "./routes/settingsRoute";
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -57,6 +57,7 @@ app.use("/api/role-permissions", rolePermissionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/absences", absenceRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/settings", settingsRoutes);
 
 // create server + socket.io
 const server = http.createServer(app);

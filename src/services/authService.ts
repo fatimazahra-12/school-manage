@@ -77,7 +77,8 @@ export class AuthService {
       },
     });
 
-    const accessToken = generateAccessToken({ id: user.id, roles: authorities });
+    // Include roleId so downstream guards (requireAdmin) can authorize properly
+    const accessToken = generateAccessToken({ id: user.id, roleId: user.role_id, roles: authorities });
 
     return { user, accessToken, refreshToken, authorities };
   }
