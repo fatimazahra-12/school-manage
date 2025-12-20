@@ -72,7 +72,27 @@ model User {
   role           Role             @relation(fields: [role_id], references: [id])
   notificationsAsActor   Notification[]          @relation("NotificationActor")
   notificationRecipients NotificationRecipient[]
+  profile        Profile?
 }
+
+model Profile {
+  id              Int      @id @default(autoincrement())
+  user_id         Int      @unique
+  telephone       String?
+  adresse         String?
+  ville           String?
+  pays            String?
+  avatar_url      String?
+  date_naissance  DateTime?
+  bio             String?
+  fonction        String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id])
+}
+
+
 
 model Role {
   id              Int              @id @default(autoincrement())
