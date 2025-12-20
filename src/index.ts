@@ -32,6 +32,7 @@ import userRoutes from "./routes/userRoute.js";
 import absenceRoutes from "./routes/absenceRoute.js";
 import notificationRoutes from "./routes/notificationRoute.js";
 import settingsRoutes from "./routes/settingsRoute";
+import profileRoutes from "./routes/profileRoute.js";
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -58,6 +59,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/absences", absenceRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/profile", profileRoutes);
 
 // create server + socket.io
 const server = http.createServer(app);
