@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { checkPermission } from "../middlewares/roleMiddleware.js";
-import { listPlanning, createPlanning, deletePlanning,
+import {
+    listPlanning, createPlanning, updatePlanning, deletePlanning,
     getPlanningByCours, getPlanningByDay, getPlanningForGroupe,
     getPlanningForEnseignant, detectPlanningConflict } from "../controllers/planningController.js";
 import { authMiddleware } from '../middlewares/authMiddleware.js';
@@ -9,6 +10,7 @@ const r = Router();
 
 r.get('/', authMiddleware, checkPermission("PLANNING_VIEW"), listPlanning);
 r.post('/', authMiddleware, checkPermission("PLANNING_MANAGE"), createPlanning);
+r.put('/:id', authMiddleware, checkPermission("PLANNING_MANAGE"), updatePlanning);
 r.delete('/:id', authMiddleware, checkPermission("PLANNING_MANAGE"), deletePlanning);
 r.get('/cours/:cours_id', authMiddleware, checkPermission("PLANNING_VIEW"), getPlanningByCours);
 r.get('/jour/:jour', authMiddleware, checkPermission("PLANNING_VIEW"), getPlanningByDay);
